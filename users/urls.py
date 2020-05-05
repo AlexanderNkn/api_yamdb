@@ -5,8 +5,10 @@ from . import views
 
 
 router = DefaultRouter()
-router.register('', views.ApiUserViewSet)
+router.register('users', views.ApiUserViewSet)
+
 
 urlpatterns = [
+    path('users/me/', views.UserProfile.as_view()),
     path('', include(router.urls)),
 ]
