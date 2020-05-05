@@ -1,8 +1,16 @@
-from rest_framework import generics, viewsets
+from rest_framework import status, viewsets
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import User
 from .serializers import UserSerializer
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
 
 
 class ApiUserViewSet(viewsets.ModelViewSet):
@@ -12,6 +20,8 @@ class ApiUserViewSet(viewsets.ModelViewSet):
     '''
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = CustomPagination
+    permission_classes = [IsAdminUser]
     lookup_field = 'username'
 
     def get_queryset(self):
@@ -22,13 +32,19 @@ class ApiUserViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class UserProfile(generics.ListCreateAPIView):
+class UserProfile(APIView):
     '''
     Get and patch your profile
     '''
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    def get(self, request, format=None):
+        user = self.request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
-    def get_queryset(self):
-        queryset = User.objects.filter(username=self.request.user.username)
-        return queryset
+    def patch(self, request, format=None):
+        user = self.request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
