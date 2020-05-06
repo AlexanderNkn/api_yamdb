@@ -1,4 +1,4 @@
-from django.contrib.auth.hashers import make_password
+#from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
@@ -22,16 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         if value not in ['admin', 'moderator', 'user']:
             raise ValidationError("Allowed value for role is 'user' or 'moderator' or 'admin'")
         return value
-
-    def validate_password(self, value: str) -> str:
-        """
-        Hash value passed by user.
     
-        :param value: password of a user
-        :return: a hashed version of the password
-        """
-        return make_password(value)
-
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
@@ -41,12 +32,39 @@ class UserSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             role=validated_data.get('role', 'user'),
         )
-#        user.set_password(validated_data['password'])
         if validated_data.get('role') == 'admin':
             user.is_staff = True
             user.is_superuser = True
-            user.save()
+        else:
+            user.is_staff = False
+            user.is_superuser = False
+        user.save()
         return user
+
+#    def validate_password(self, value: str) -> str:
+#        """
+#        Hash value passed by user.
+#    
+#        :param value: password of a user
+#        :return: a hashed version of the password
+#        """
+#        return make_password(value)
+
+#    def create(self, validated_data):
+#        user = User.objects.create_user(
+#            username=validated_data['username'],
+#            email=validated_data['email'],
+#            first_name=validated_data.get('first_name', ''),
+#            last_name=validated_data.get('last_name', ''),
+#            bio=validated_data.get('bio', ''),
+#            role=validated_data.get('role', 'user'),
+#        )
+##        user.set_password(validated_data['password'])
+#        if validated_data.get('role') == 'admin':
+#            user.is_staff = True
+#            user.is_superuser = True
+#            user.save()
+#        return user
 
     class Meta:
         model = User

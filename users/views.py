@@ -24,13 +24,36 @@ class ApiUserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     lookup_field = 'username'
 
-    def get_queryset(self):
-        queryset = User.objects.all()
-        username = self.kwargs.get('username', None)
-        if username is not None:
-            return User.objects.filter(username=username)
-        return queryset
+#    def patch(self, request, format=None):
+#        user = self.request.user
+#        serializer = UserSerializer(user, data=request.data, partial=True)
+#        if serializer.is_valid():
+#            serializer.save()
+#            return Response(serializer.data, status=status.HTTP_200_OK)
+#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#    def get_queryset(self):
+#        queryset = User.objects.all()
+#        username = self.kwargs.get('username', None)
+#        if username is not None:
+#            return User.objects.filter(username=username)
+#        return queryset
+    def partial_update(self, request, username):
+        user = User.objects.get(username=username)
+        role = request.data.get('role', None)
+        if role is not None:
+            if role == 'admin':
+                user.is_staff = True
+                user.is_superuser = True
+            else:
+                user.is_staff = False
+                user.is_superuser = False
+            user.save() 
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfile(APIView):
     '''
