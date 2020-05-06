@@ -1,4 +1,5 @@
 #from django.contrib.auth.hashers import make_password
+#from django.core import mail
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
@@ -69,3 +70,28 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'bio', 'role', 'id']  # 'password']
+
+
+class SignUpSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+            required=True,
+            validators=[UniqueValidator(queryset=User.objects.all())]
+            )
+            
+#    def send_email(self, email, first_name=None, last_name=None):
+#        # отправка письма об успешной регистрации
+#        if not first_name and not last_name:
+#            text = 'Благодарим'
+#        else: 
+#            text = ', благодарим'
+#        mail.send_mail(
+#                'Регистрация пользователя', 
+#                f'{last_name} {first_name}{text} за регистрацию на нашем сайте!',
+#                'yatube@mail.ru', 
+#                [email],
+#                fail_silently=False, 
+#            )        
+
+    class Meta:
+        model = User
+        fields = ['email',]
