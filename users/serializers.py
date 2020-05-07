@@ -1,9 +1,8 @@
-#from django.contrib.auth.hashers import make_password
-#from django.core import mail
+from django.conf import settings
+from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import User
 
@@ -15,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
             required=True,
             validators=[UniqueValidator(queryset=User.objects.all())]
             )
-#    password = serializers.CharField(min_length=8, write_only=True)
 
     def validate_role(self, value):
         '''
@@ -43,34 +41,9 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-#    def validate_password(self, value: str) -> str:
-#        """
-#        Hash value passed by user.
-#    
-#        :param value: password of a user
-#        :return: a hashed version of the password
-#        """
-#        return make_password(value)
-
-#    def create(self, validated_data):
-#        user = User.objects.create_user(
-#            username=validated_data['username'],
-#            email=validated_data['email'],
-#            first_name=validated_data.get('first_name', ''),
-#            last_name=validated_data.get('last_name', ''),
-#            bio=validated_data.get('bio', ''),
-#            role=validated_data.get('role', 'user'),
-#        )
-##        user.set_password(validated_data['password'])
-#        if validated_data.get('role') == 'admin':
-#            user.is_staff = True
-#            user.is_superuser = True
-#            user.save()
-#        return user
-
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'bio', 'role', 'id']  # 'password']
+        fields = ['first_name', 'last_name', 'username', 'email', 'bio', 'role', 'id']
 
 
 class SignUpSerializer(serializers.ModelSerializer):
@@ -79,42 +52,25 @@ class SignUpSerializer(serializers.ModelSerializer):
             validators=[UniqueValidator(queryset=User.objects.all())]
             )
             
-#    def send_email(self, email, first_name=None, last_name=None):
-#        # отправка письма об успешной регистрации
-#        if not first_name and not last_name:
-#            text = 'Благодарим'
-#        else: 
-#            text = ', благодарим'
-#        mail.send_mail(
-#                'Регистрация пользователя', 
-#                f'{last_name} {first_name}{text} за регистрацию на нашем сайте!',
-#                'yatube@mail.ru', 
-#                [email],
-#                fail_silently=False, 
-#            )        
-
     class Meta:
         model = User
         fields = ['email', 'username']
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-#    def validate(self, attrs):
-#        data = super().validate(attrs)
-#        refresh = self.get_token(self.user)
-#        data['refresh'] = str(refresh)
-#        data['access'] = str(refresh.access_token)
-#
-#        # Add extra responses here
-#        data['email'] = self.user.email
-#        return data
+class MyTokenSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    confirmation_code = serializers.CharField()
+    email = serializers.EmailField()
 
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['email'] = user.email
-        # ...
-
-        return token
+    def validate_confirmation_code(self, value):
+        email = self.context['request'].data.get('email')
+        username = self.context['request'].data.get('username')
+        password = email + username
+        response_code = make_password(
+                password=password, 
+                salt='settings.SECRET_KEY', 
+                hasher='default'
+            ).split('$')[-1]
+        if response_code != value:
+            raise ValidationError('The confirmation code is not correct.')
+        return value

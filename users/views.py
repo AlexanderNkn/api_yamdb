@@ -6,15 +6,14 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenViewBase
 
 from .models import User
-from .serializers import (MyTokenObtainPairSerializer, SignUpSerializer,
-                          UserSerializer)
+from .serializers import MyTokenSerializer, SignUpSerializer, UserSerializer
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+class MyTokenObtainPairView(TokenViewBase):
+    serializer_class = MyTokenSerializer
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -32,20 +31,6 @@ class ApiUserViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAdminUser]
     lookup_field = 'username'
 
-#    def patch(self, request, format=None):
-#        user = self.request.user
-#        serializer = UserSerializer(user, data=request.data, partial=True)
-#        if serializer.is_valid():
-#            serializer.save()
-#            return Response(serializer.data, status=status.HTTP_200_OK)
-#        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#    def get_queryset(self):
-#        queryset = User.objects.all()
-#        username = self.kwargs.get('username', None)
-#        if username is not None:
-#            return User.objects.filter(username=username)
-#        return queryset
     def partial_update(self, request, username):
         user = User.objects.get(username=username)
         role = request.data.get('role', None)
@@ -89,8 +74,10 @@ class SignUpEmail(APIView):
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.data.get('email')
+            username = serializer.data.get('username')
+            password = email + username
             confirmation_code = make_password(
-                password=email, 
+                password=password, 
                 salt='settings.SECRET_KEY', 
                 hasher='default'
             ).split('$')[-1]
