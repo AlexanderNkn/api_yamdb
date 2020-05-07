@@ -6,14 +6,32 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenViewBase
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import User
 from .serializers import MyTokenSerializer, SignUpSerializer, UserSerializer
 
 
-class MyTokenObtainPairView(TokenViewBase):
-    serializer_class = MyTokenSerializer
+class MyTokenObtainPairView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = MyTokenSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.data.get('username')
+            email = serializer.data.get('email')
+            user, created = User.objects.get_or_create(username=username, email=email)
+            data = self.get_tokens_for_user(user)
+            return Response(data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get_tokens_for_user(self, user):
+        refresh = RefreshToken.for_user(user)
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -61,8 +79,12 @@ class UserProfile(APIView):
         user = self.request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
-            # do not allow to change role in profile
-            serializer.save(role=user.role)
+            # Do not allow to change username, email and role in profile
+            serializer.save(
+                username=user.username,
+                email=user.email,
+                role=user.role
+            )
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

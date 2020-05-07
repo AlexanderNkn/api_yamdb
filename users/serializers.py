@@ -63,14 +63,14 @@ class MyTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_confirmation_code(self, value):
-        email = self.context['request'].data.get('email')
-        username = self.context['request'].data.get('username')
+        email = self.initial_data.get('email')
+        username = self.initial_data.get('username')
         password = email + username
         response_code = make_password(
-                password=password, 
-                salt='settings.SECRET_KEY', 
-                hasher='default'
-            ).split('$')[-1]
+            password=password, 
+            salt='settings.SECRET_KEY', 
+            hasher='default'
+        ).split('$')[-1]
         if response_code != value:
             raise ValidationError('The confirmation code is not correct.')
         return value
