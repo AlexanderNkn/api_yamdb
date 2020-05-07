@@ -1,13 +1,20 @@
+from django.conf import settings
+from django.contrib.auth.hashers import make_password
 from django.core import mail
 from rest_framework import status, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import User
-from .serializers import SignUpSerializer, UserSerializer
+from .serializers import (MyTokenObtainPairSerializer, SignUpSerializer,
+                          UserSerializer)
 
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -69,7 +76,8 @@ class UserProfile(APIView):
         user = self.request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            # do not allow to change role in profile
+            serializer.save(role=user.role)
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -81,9 +89,14 @@ class SignUpEmail(APIView):
         serializer = SignUpSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.data.get('email')
+            confirmation_code = make_password(
+                password=email, 
+                salt='settings.SECRET_KEY', 
+                hasher='default'
+            ).split('$')[-1]
             mail.send_mail(
                 'Sign up new user', 
-                'Благодарим за регистрацию на нашем сайте!',
+                f'Your confirmation code is {confirmation_code}',
                 'yatube@mail.ru', 
                 [email],
                 fail_silently=False, 
