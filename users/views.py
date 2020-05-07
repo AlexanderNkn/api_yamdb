@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.core import mail
 from rest_framework import status, viewsets
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
@@ -76,15 +77,16 @@ class UserProfile(APIView):
         return Response(serializer.data)
 
     def patch(self, request, format=None):
+        # Do not allow to change username, email and role in profile
+        for item in request.data.keys():
+            if item in ['username', 'email', 'role']:
+                raise ValidationError(
+                    'You cannot change username, email and role in profile'
+                )
         user = self.request.user
         serializer = UserSerializer(user, data=request.data, partial=True)
         if serializer.is_valid():
-            # Do not allow to change username, email and role in profile
-            serializer.save(
-                username=user.username,
-                email=user.email,
-                role=user.role
-            )
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
