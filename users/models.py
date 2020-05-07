@@ -9,12 +9,11 @@ ROLE_CHOICES = (
     ('admin', 'admin'),
 )
 
-
 class User(AbstractUser):
     '''
     A custom user model to customize it if the need arises.
     '''
-    bio = models.TextField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True, verbose_name='description')
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='user')
     # email required
     email = models.EmailField(_('email address'),)
