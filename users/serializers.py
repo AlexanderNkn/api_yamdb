@@ -48,10 +48,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignUpSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+    email = serializers.EmailField()
+    username = serializers.CharField()
             
     class Meta:
         model = User
