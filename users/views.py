@@ -54,6 +54,7 @@ class ApiUserViewSet(viewsets.ModelViewSet):
         user = User.objects.get(username=username)
         role = request.data.get('role', None)
         if role is not None:
+            # create user or admin depending on role
             if role == 'admin':
                 user.is_staff = True
                 user.is_superuser = True
@@ -99,18 +100,22 @@ class SignUpEmail(APIView):
         if serializer.is_valid():
             email = serializer.data.get('email')
             username = serializer.data.get('username')
-            password = email + username
-            confirmation_code = make_password(
-                password=password, 
-                salt='settings.SECRET_KEY', 
-                hasher='default'
-            ).split('$')[-1]
-            mail.send_mail(
-                'Sign up new user', 
-                f'Your confirmation code is {confirmation_code}',
-                'yatube@mail.ru', 
-                [email],
-                fail_silently=False, 
-            )        
+            self.send_mail(email, username)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def send_mail(self, email, username):
+        # confirmation code generation using user's email and username
+        password = email + username
+        confirmation_code = make_password(
+            password=password, 
+            salt='settings.SECRET_KEY', 
+            hasher='default'
+        ).split('$')[-1]
+        mail.send_mail(
+            'Sign up new user', 
+            f'Your confirmation code is {confirmation_code}',
+            'yatube@mail.ru', 
+            [email],
+            fail_silently=False, 
+        )        

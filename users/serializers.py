@@ -32,6 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
             bio=validated_data.get('bio', ''),
             role=validated_data.get('role', 'user'),
         )
+        # create user or admin depending on role
         if validated_data.get('role') == 'admin':
             user.is_staff = True
             user.is_superuser = True
@@ -63,6 +64,10 @@ class MyTokenSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_confirmation_code(self, value):
+        '''
+        Check confirmation code returned from user
+        '''
+        # confirmation code generation using user's email and username
         email = self.initial_data.get('email')
         username = self.initial_data.get('username')
         password = email + username
