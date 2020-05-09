@@ -101,7 +101,8 @@ class SignUpEmail(APIView):
             email = serializer.data.get('email')
             username = serializer.data.get('username')
             self.send_mail(email, username)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"detail": "Confirmation code was sent to your email"}, 
+                            status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def send_mail(self, email, username):

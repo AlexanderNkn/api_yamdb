@@ -50,6 +50,28 @@ class UserSerializer(serializers.ModelSerializer):
 class SignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     username = serializers.CharField()
+
+    # for validation of uniqueness of email and username do not use built-in validators
+    # because it will constraint users created by admin
+    def validate_email(self, value):
+        '''
+        Check uniqueness of email
+        '''
+        username = self.initial_data.get('username')
+        if User.objects.filter(email=value).exists():
+            if not User.objects.filter(username=username, email=value).exists():
+                raise ValidationError('The email must be unique')
+        return value
+
+    def validate_username(self, value):
+        '''
+        Check uniqueness of username
+        '''
+        email = self.initial_data.get('email')
+        if User.objects.filter(username=value).exists():
+            if not User.objects.filter(username=value, email=email).exists():
+                raise ValidationError('The username must be unique')
+        return value
             
     class Meta:
         model = User
