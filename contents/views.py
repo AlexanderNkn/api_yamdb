@@ -3,7 +3,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Category, Genre, Title
-from .permissions import IsAdnminOrReadOnly
+from .permissions import IsAdnminRoleOrReadOnly
 from .serializers import CategorySerializer, GenreSerializer, TitleSerializer
 
 
