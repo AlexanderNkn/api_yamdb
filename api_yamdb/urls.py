@@ -13,12 +13,21 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('api/v1/', include([
-        # JWT authentication
-        path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
-        path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-        path('', include('users.urls')),
-        re_path("titles/(?P<title_id>\d+)/reviews/", include("reviews.urls")),
-        path("api-auth/", include("rest_framework.urls")),
-    ])),
+    path(
+        "api/v1/",
+        include(
+            [
+                path(
+                    "token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"
+                ),
+                path(
+                    "token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+                ),
+                path("", include("users.urls")),
+                path("", include("contents.urls")),
+                re_path("titles/(?P<title_id>\d+)/reviews/", include("reviews.urls")),
+                path("api-auth/", include("rest_framework.urls")),
+            ]
+        ),
+    )
 ]

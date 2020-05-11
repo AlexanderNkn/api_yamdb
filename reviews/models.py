@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
-from objects.models import Object
+from contents.models import Title
 
 
 User = get_user_model()
 
 
 class Review(models.Model):
-    object = models.ForeignKey(Object, on_delete=models.CASCADE)
+    title = models.ForeignKey(Title, on_delete=models.CASCADE)
     text = models.TextField(max_length=10000)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(choices=[(i, i) for i in range(1, 11)])

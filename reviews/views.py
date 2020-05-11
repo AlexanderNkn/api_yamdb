@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, pagination
 
-from objects.models import Object
+from contents.models import Title
 from .models import Review, Comment
 from .serializers import ReviewSerializer, CommentSerializer
 from .permissions import IsOwnerAdminModeratorOrReadOnly
@@ -15,12 +15,14 @@ class NestedResourceMixin:
     """
 
     _parent_object, _parent_field, _parent_url_id = None, None, None
-    
+
     def _serializer_save_fields(self):
         return {}
-    
+
     def _get_parent(self):
-        return get_object_or_404(self._parent_object, id=self.kwargs[self._parent_url_id])
+        return get_object_or_404(
+            self._parent_object, id=self.kwargs[self._parent_url_id]
+        )
 
     def get_queryset(self):
         parent = self._get_parent()
@@ -28,7 +30,9 @@ class NestedResourceMixin:
 
     def perform_create(self, serializer):
         parent = self._get_parent()
-        serializer.save(**{self._parent_field: parent}, **self._serializer_save_fields())
+        serializer.save(
+            **{self._parent_field: parent}, **self._serializer_save_fields()
+        )
 
 
 class ReviewViewSet(NestedResourceMixin, viewsets.ModelViewSet):
@@ -39,7 +43,7 @@ class ReviewViewSet(NestedResourceMixin, viewsets.ModelViewSet):
         IsOwnerAdminModeratorOrReadOnly,
     ]
     pagination_class = pagination.PageNumberPagination
-    _parent_object, _parent_field, _parent_url_id = Object, "object", "title_id"
+    _parent_object, _parent_field, _parent_url_id = Title, "title", "title_id"
 
     def _serializer_save_fields(self):
         return {"author": self.request.user}

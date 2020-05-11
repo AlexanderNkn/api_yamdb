@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "reviews",
     "objects",
-    'users',
+    "users",
+    "contents",
 ]
 
 MIDDLEWARE = [
@@ -110,24 +111,22 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static/"),)
 
-# custom extensions of settings 
-AUTH_USER_MODEL  = 'users.User'
+# custom extensions of settings
+AUTH_USER_MODEL = "users.User"
 
-REST_FRAMEWORK = {        
+REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly"
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication"
     ],
-    'PAGE_SIZE': 10,
+    "PAGE_SIZE": 10,
 }
 
 # set JWT token lifetime
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=720),
-}
+SIMPLE_JWT = {"ACCESS_TOKEN_LIFETIME": timedelta(minutes=720)}
 
 #  email backend for signup
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")

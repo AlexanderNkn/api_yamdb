@@ -25,3 +25,5 @@ sent_emails/
 
 users/migrations/
 reviews/migrations/
+
+data/

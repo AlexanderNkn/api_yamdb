@@ -18,11 +18,7 @@ authors = User.objects.all()
 for _ in range(20):
     Review.objects.create(
         object=object,
-        text=''.join(random.choices(string.ascii_uppercase, k=10)),
-        author = random.choice(authors),
-        score = random.choice(range(1, 11))
+        text="".join(random.choices(string.ascii_uppercase, k=10)),
+        author=random.choice(authors),
+        score=random.choice(range(1, 11)),
     )
-    
-
-
-    
