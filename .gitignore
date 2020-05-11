@@ -20,3 +20,8 @@ db.sqlite3
 
 Pipfile
 Pipfile.lock
+
+sent_emails/
+
+users/migrations/
+reviews/migrations/

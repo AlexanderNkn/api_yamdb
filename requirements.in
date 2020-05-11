@@ -2,3 +2,5 @@ pytest-django
 requests
 django
 djangorestframework
+pylint_django
+django_dotenv
