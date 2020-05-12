@@ -16,8 +16,8 @@ class Genre(models.Model):
 
 class Title(models.Model):
     name = models.CharField(max_length=200)
-    year = models.IntegerField(blank=True)
-    description = models.CharField(max_length=500, blank=True)
+    year = models.IntegerField(null=True, blank=True)
+    description = models.CharField(max_length=500, null=True, blank=True)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -26,3 +26,4 @@ class Title(models.Model):
         related_name="title_category",
     )
     genre = models.ManyToManyField(Genre, related_name="title_genres")
+    rating = models.IntegerField(default=0)
