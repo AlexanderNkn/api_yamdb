@@ -25,7 +25,6 @@ sent_emails/
 
 data/
 
-**/migrations/*
-!**/migrations/__init__.py
+
 
 
