@@ -49,14 +49,16 @@ class ReviewViewSet(NestedResourceMixin, viewsets.ModelViewSet):
     def perform_create(self, serializer):
         self._pre_perform_create()
         super().perform_create(serializer)
-        
+
     def _serializer_save_fields(self):
         return {"author": self.request.user}
 
     def _pre_perform_create(self):
         title = get_object_or_404(Title, id=self.kwargs["title_id"])
         if Review.objects.filter(author=self.request.user, title=title).exists():
-            raise serializers.ValidationError("You can only leave one review per title.")
+            raise serializers.ValidationError(
+                "You can only leave one review per title."
+            )
 
 
 class CommentViewSet(NestedResourceMixin, viewsets.ModelViewSet):

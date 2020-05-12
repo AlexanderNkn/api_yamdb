@@ -3,7 +3,7 @@ import string
 
 from contents.models import Title
 from reviews.models import Review, Comment
-from users.models import User 
+from users.models import User
 
 
 titles = ["LOTR", "GOT", "OITNB", "BB", "ST"]

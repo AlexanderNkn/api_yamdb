@@ -28,4 +28,6 @@ reviews/migrations/
 
 data/
 _migrations/
-!_/__init__.py
+!_migrations/__init__.py
+
+
