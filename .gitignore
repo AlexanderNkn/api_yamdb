@@ -27,3 +27,5 @@ users/migrations/
 reviews/migrations/
 
 data/
+_migrations/
+!_/__init__.py
