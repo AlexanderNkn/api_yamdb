@@ -23,11 +23,9 @@ Pipfile.lock
 
 sent_emails/
 
-users/migrations/
-reviews/migrations/
-
 data/
-_migrations/
-!_migrations/__init__.py
+
+**/migrations/*
+!**/migrations/__init__.py
 
 
