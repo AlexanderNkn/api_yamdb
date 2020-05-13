@@ -72,6 +72,8 @@ class SignUpSerializer(serializers.ModelSerializer):
         if User.objects.filter(username=value).exists():
             if not User.objects.filter(username=value, email=email).exists():
                 raise ValidationError("The username must be unique")
+        if value == "me":
+            raise ValidationError("You cannot use 'me' as a username")
         return value
 
     class Meta:
