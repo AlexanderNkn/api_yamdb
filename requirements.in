@@ -4,3 +4,4 @@ django
 djangorestframework
 pylint_django
 django_dotenv
+djangorestframework-simplejwt

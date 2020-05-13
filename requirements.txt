@@ -10,8 +10,9 @@ attrs==19.3.0             # via pytest
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
 django-dotenv==1.4.2      # via -r requirements.in
-django==3.0.5             # via -r requirements.in, djangorestframework
-djangorestframework==3.11.0  # via -r requirements.in
+django==3.0.5             # via -r requirements.in, djangorestframework, djangorestframework-simplejwt
+djangorestframework-simplejwt==4.4.0  # via -r requirements.in
+djangorestframework==3.11.0  # via -r requirements.in, djangorestframework-simplejwt
 idna==2.9                 # via requests
 importlib-metadata==1.6.0  # via pluggy, pytest
 isort==4.3.21             # via pylint
@@ -21,6 +22,7 @@ more-itertools==8.2.0     # via pytest
 packaging==20.3           # via pytest
 pluggy==0.13.1            # via pytest
 py==1.8.1                 # via pytest
+pyjwt==1.7.1              # via djangorestframework-simplejwt
 pylint-django==2.0.15     # via -r requirements.in
 pylint-plugin-utils==0.6  # via pylint-django
 pylint==2.5.0             # via pylint-django, pylint-plugin-utils
