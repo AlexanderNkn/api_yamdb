@@ -1,23 +1,23 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# from .models import Category, Genre, Title
-
-
-# class CategoryAdmin(admin.ModelAdmin):
-#     list_display = ("pk", "title", "slug")
-#     empty_value_display = "-пусто-"
+from .models import Category, Genre, Title
 
 
-# class GenreAdmin(admin.ModelAdmin):
-#     list_display = ("pk", "title", "slug")
-#     empty_value_display = "-пусто-"
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ("pk", "name", "slug")
+    empty_value_display = "-пусто-"
 
 
-# class TitleAdmin(admin.ModelAdmin):
-#     list_display = ("pk", "title", "year", "description", "category")
-#     empty_value_display = "-пусто-"
+class GenreAdmin(admin.ModelAdmin):
+    list_display = ("pk", "name", "slug")
+    empty_value_display = "-пусто-"
 
 
-# admin.site.register(Category, CategoryAdmin)
-# admin.site.register(Genre, GenreAdmin)
-# admin.site.register(Title, TitleAdmin)
+class TitleAdmin(admin.ModelAdmin):
+    list_display = ("pk", "name", "year", "category")
+    empty_value_display = "-пусто-"
+
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Title, TitleAdmin)
