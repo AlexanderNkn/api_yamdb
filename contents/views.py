@@ -19,13 +19,17 @@ class CategoryViewSet(viewsets.GenericViewSet,
     lookup_field = "slug"
 
 
-class GenreViewSet(viewsets.ModelViewSet):
+class GenreViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin, 
+                      mixins.DestroyModelMixin):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name",)
     permission_classes = [IsAuthenticatedOrReadOnly, IsAdminOrReadOnly]
-
+    lookup_field = "slug"
+    
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
