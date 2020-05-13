@@ -1,4 +1,4 @@
-from rest_framework import viewsets, filters
+from rest_framework import filters, mixins, viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -7,12 +7,16 @@ from .permissions import IsAdminOrReadOnly
 from .serializers import CategorySerializer, GenreSerializer, TitleSerializer
 
 
-class CategoryViewSet(viewsets.ModelViewSet):
+class CategoryViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin, 
+                      mixins.DestroyModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ("name",)
     permission_classes = [IsAuthenticatedOrReadOnly, IsAdminOrReadOnly]
+    lookup_field = "slug"
 
 
 class GenreViewSet(viewsets.ModelViewSet):
