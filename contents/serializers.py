@@ -33,3 +33,17 @@ class TitleSerializer(serializers.ModelSerializer):
 
     def get_rating(self, obj):
         return Review.objects.filter(title=obj).aggregate(Avg("score"))["score__avg"]
+
+
+class TitleSerializerGet(serializers.ModelSerializer):
+    name = serializers.CharField()
+    category = CategorySerializer()
+    genre = GenreSerializer(many=True)
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Title
+        fields = "__all__"
+
+    def get_rating(self, obj):
+        return Review.objects.filter(title=obj).aggregate(Avg("score"))["score__avg"]
