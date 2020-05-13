@@ -3,8 +3,19 @@ from django.db import models
 
 User = get_user_model()
 
-RAING_CHOICES = (("1", "1"), ("2", "2"), ("3", "3"),("4", "4"),("5", "5"),
-                ("6", "6"),("7", "7"),("8", "8"),("9", "9"),("10", "10"),)
+RAING_CHOICES = (
+    ("1", "1"),
+    ("2", "2"),
+    ("3", "3"),
+    ("4", "4"),
+    ("5", "5"),
+    ("6", "6"),
+    ("7", "7"),
+    ("8", "8"),
+    ("9", "9"),
+    ("10", "10"),
+)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=200)

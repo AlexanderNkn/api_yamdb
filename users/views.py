@@ -71,6 +71,7 @@ class UserProfile(APIView):
     """
     Get and patch your profile
     """
+
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
