@@ -91,12 +91,13 @@ class MyTokenSerializer(serializers.Serializer):
         Check confirmation code returned from user
         """
         # confirmation code generation using user's email and username
-        email = self.initial_data.get("email")
-        username = self.initial_data.get("username")
-        password = email + username
-        response_code = make_password(
-            password=password, salt="settings.SECRET_KEY", hasher="default"
-        ).split("$")[-1]
-        if response_code != value:
-            raise ValidationError("The confirmation code is not correct.")
-        return value
+        email = self.initial_data.get("email", "")
+        username = self.initial_data.get("username", "")
+        if email and username:
+            password = email + username
+            response_code = make_password(
+                password=password, salt="settings.SECRET_KEY", hasher="default"
+            ).split("$")[-1]
+            if response_code != value:
+                raise ValidationError("The confirmation code is not correct.")
+            return value
