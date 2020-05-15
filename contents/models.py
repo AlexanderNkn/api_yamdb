@@ -32,7 +32,6 @@ class Title(models.Model):
         related_name="title_category",
     )
     genre = models.ManyToManyField(Genre, related_name="title_genres")
-    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
