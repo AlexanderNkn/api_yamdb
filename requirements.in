@@ -5,3 +5,8 @@ djangorestframework
 pylint_django
 django_dotenv
 djangorestframework-simplejwt
+gunicorn
+psycopg2-binary
+django-filter
+importlib-metadata
+typed-ast
