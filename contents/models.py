@@ -33,5 +33,8 @@ class Title(models.Model):
     )
     genre = models.ManyToManyField(Genre, related_name="title_genres")
 
+    # class Meta:
+    #     ordering = ["name"]
+
     def __str__(self):
         return self.name
