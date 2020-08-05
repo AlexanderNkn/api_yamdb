@@ -10,12 +10,10 @@ attrs==19.3.0             # via pytest
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
 django-dotenv==1.4.2      # via -r requirements.in
-django==3.0.5             # via -r requirements.in, djangorestframework, djangorestframework-simplejwt
-django-filter==2.2.0
+django==3.0.7             # via -r requirements.in, djangorestframework, djangorestframework-simplejwt
 djangorestframework-simplejwt==4.4.0  # via -r requirements.in
 djangorestframework==3.11.0  # via -r requirements.in, djangorestframework-simplejwt
 idna==2.9                 # via requests
-importlib-metadata==1.6.0  # via pluggy, pytest
 isort==4.3.21             # via pylint
 lazy-object-proxy==1.4.3  # via astroid
 mccabe==0.6.1             # via pylint
@@ -35,8 +33,6 @@ requests==2.23.0          # via -r requirements.in
 six==1.14.0               # via astroid, packaging
 sqlparse==0.3.1           # via django
 toml==0.10.0              # via pylint
-typed-ast==1.4.1          # via astroid
 urllib3==1.25.9           # via requests
 wcwidth==0.1.9            # via pytest
 wrapt==1.12.1             # via astroid
-zipp==3.1.0               # via importlib-metadata
