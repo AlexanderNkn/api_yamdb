@@ -4,44 +4,27 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
-asgiref==3.2.7            # via django
-astroid==2.4.0            # via pylint
+asgiref==3.2.10           # via -r requirements.in, django
 attrs==19.3.0             # via pytest
-certifi==2020.4.5.1       # via requests
-chardet==3.0.4            # via requests
-django-dotenv==1.4.2      # via -r requirements.in
-django-filter==2.2.0      # via -r requirements.in
-django==3.0.7             # via -r requirements.in, django-filter, djangorestframework, djangorestframework-simplejwt
+django-filter==2.3.0      # via -r requirements.in
+django==3.1               # via -r requirements.in, django-filter, djangorestframework, djangorestframework-simplejwt
 djangorestframework-simplejwt==4.4.0  # via -r requirements.in
-djangorestframework==3.11.0  # via -r requirements.in, djangorestframework-simplejwt
+djangorestframework==3.11.1  # via -r requirements.in, djangorestframework-simplejwt
 gunicorn==20.0.4          # via -r requirements.in
-idna==2.9                 # via requests
-importlib-metadata==1.7.0  # via -r requirements.in
-isort==4.3.21             # via pylint
-lazy-object-proxy==1.4.3  # via astroid
-mccabe==0.6.1             # via pylint
-more-itertools==8.2.0     # via pytest
-packaging==20.3           # via pytest
+iniconfig==1.0.1          # via pytest
+more-itertools==8.4.0     # via pytest
+packaging==20.4           # via pytest
 pluggy==0.13.1            # via pytest
 psycopg2-binary==2.8.5    # via -r requirements.in
-py==1.8.1                 # via pytest
-pyjwt==1.7.1              # via djangorestframework-simplejwt
-pylint-django==2.0.15     # via -r requirements.in
-pylint-plugin-utils==0.6  # via pylint-django
-pylint==2.5.0             # via pylint-django, pylint-plugin-utils
+py==1.9.0                 # via pytest
+pyjwt==1.7.1              # via -r requirements.in, djangorestframework-simplejwt
 pyparsing==2.4.7          # via packaging
 pytest-django==3.9.0      # via -r requirements.in
-pytest==5.4.1             # via pytest-django
-pytz==2019.3              # via django
-requests==2.23.0          # via -r requirements.in
-six==1.14.0               # via astroid, packaging
-sqlparse==0.3.1           # via django
-toml==0.10.0              # via pylint
-typed-ast==1.4.1          # via -r requirements.in
-urllib3==1.25.9           # via requests
-wcwidth==0.1.9            # via pytest
-wrapt==1.12.1             # via astroid
-zipp==3.1.0               # via importlib-metadata
+pytest==6.0.1             # via pytest-django
+pytz==2020.1              # via -r requirements.in, django
+six==1.15.0               # via packaging
+sqlparse==0.3.1           # via -r requirements.in, django
+toml==0.10.1              # via pytest
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
